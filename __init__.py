@@ -1,2 +1,2 @@
-from CubeSocket import CubeSocket
-from CubeSocket import CubeWrap
+from CubeSocket256 import CubeSocket
+from CubeSocket256 import CubeWrap
