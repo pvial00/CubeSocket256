@@ -2,7 +2,7 @@
 Socket bindings using the Cube256 cipher for encryption and decryption
 
 # Description
-CubeSocket provides two classes CubeSocket and CubeWrap.  CubeSocket is used like the ordinary socket calls but the are encapsulated with the Cube90 cipher.  CubeWrap is used to encapulate an existing socket.
+CubeSocket provides two classes CubeSocket and CubeWrap.  CubeSocket is used like the ordinary socket calls but the are encapsulated with the Cube256 cipher.  CubeWrap is used to encapulate an existing socket.
 
 The cubesend and cuberecv methods can be used to securely transmit messages to and from a server.  They cubesend method generates a one time use 16 character key, encrypts it with the session key and then encrypts the payload with the one time key.  The cubeconnect method must be called first before using cubesend or cuberecv.
 
