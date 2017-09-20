@@ -35,7 +35,6 @@ class CubeSocket:
     def cli_keyexchange(self, sock):
         nonce = self.gen_key(self.nonce_length)
 	self.session_key = self.gen_key(self.key_length)
-        print self.session_key
         key = Cube(self.key, nonce).encrypt(self.session_key)
     	self.sock.send(nonce+key)
 
