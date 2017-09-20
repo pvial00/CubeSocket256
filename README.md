@@ -19,20 +19,19 @@ pycube256
 
 key = "Test"  
 sock = CubeSocket(key)  
-sock.cubeconnect("localhost", 99)  
+sock.connect("localhost", 99)  
 sock.cubesend("Test")  
 sock.close()  
 
 # Server Example
 
 host = "localhost"  
-port = 99  
 sock = CubeSocket("Test")  
 sock.bind(host, 99)  
 sock.listen(1)  
 client, addr = sock.accept()  
 cubesock = CubeSocket(client, sock.key)  
-test = cubesock.sock.cuberecv(32)  
+test = cubesock.cubesock.cuberecv(32)  
 print test  
 c.close()  
 sock.close()  
@@ -64,3 +63,23 @@ socket.bind(host, port)
 while True:  
     data = socket.cuberecvfrom(1024)  
     print data  
+
+# Server/Client communication using session key
+
+
+host = "localhost"  
+sock = CubeSocket("Test", dc=0)  
+sock.bind(host, 99)  
+sock.listen(1)  
+client, addr = sock.accept()  
+cubesock = CubeSocket(client, sock.session_key)  
+test = cubesock.cubesock.cuberecv(32)  
+print test  
+c.close()  
+sock.close()  
+
+key = "Test"  
+sock = CubeSocket(key, dc=0)  
+sock.cubeconnect("localhost", 99)  
+sock.cubesend("Test")  
+sock.close()  
