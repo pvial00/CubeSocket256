@@ -2,7 +2,6 @@ from pycube256 import CubeHMAC, Cube, CubeRandom, CubeBlock
 from dh import DiffieHellman
 import socket
 from hashlib import sha256
-from Crypto.Util import number
 
 # v0.3
 
