@@ -6,7 +6,7 @@ from hashlib import sha256
 # v0.3
 
 class CubeSocket:
-    def __init__(self, key=None, protocol="TCP", dc=0, algorithm="Cube"):
+    def __init__(self, key=None, protocol="TCP", dc=0, algorithm="Cube", dhsize=1024):
         algorithms = ['Cube','CubeHMAC', 'CubeBlock']
         if algorithm not in algorithms:
             raise ValueError('Error: Algorithm not supported.')
@@ -16,6 +16,7 @@ class CubeSocket:
         self.nonce_length = 8
         self.direct_connect = dc
         self.algorithm = algorithm
+        self.dhsize = dhsize
         if protocol == "TCP":
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         elif protocol == "UDP":
@@ -38,13 +39,13 @@ class CubeSocket:
         self.sock.bind((host, port))
 
     def cli_keyexchange(self, sock):
-        session_key = DiffieHellman(sock).cli_exchange()
+        session_key = DiffieHellman(sock, self.dhsize).cli_exchange()
         hashed_key = sha256(session_key).digest()
         session_key = hashed_key[:self.key_length]
         return session_key
 
     def srv_keyexchange(self, client_sock):
-        session_key = DiffieHellman().srv_exchange(client_sock)
+        session_key = DiffieHellman(psize=self.dhsize).srv_exchange(client_sock)
         hashed_key = sha256(session_key).digest()
         session_key = hashed_key[:self.key_length]
         return session_key
