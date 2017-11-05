@@ -4,9 +4,7 @@ Socket bindings using the Cube256 cipher for encryption and decryption
 # Description
 CubeSocket provides two classes CubeSocket and CubeWrap.  CubeSocket is used like the ordinary socket calls but the are encapsulated with the Cube256 cipher.  CubeWrap is used to encapulate an existing socket.
 
-The cubesend and cuberecv methods can be used to securely transmit messages to and from a server.  They cubesend method generates a one time use 16 character key, encrypts it with the session key and then encrypts the payload with the one time key.  The cubeconnect method must be called first before using cubesend or cuberecv.
-
-The cubeconnect utilizes a pre-shared key to exchange a random 16 character session key with the server and then proceeds using the session key.
+By default CubeSocket uses DiffieHellman Ephemeral to establish a shared secret. After which Cube256 cipher is used with a random nonce throughout the rest of the communication.
 
 A socket can be utilized directly without a secure handshake by calling CubeSocket's connect method.  The key must be known on either end.
 
@@ -30,8 +28,8 @@ sock = CubeSocket("Test")
 sock.bind(host, 99)  
 sock.listen(1)  
 client, addr = sock.accept()  
-cubesock = CubeSocket(client, sock.key)  
-test = cubesock.cubesock.cuberecv(32)  
+cubesock = CubeSocket(client, sock.session_key)  
+test = cubesock.cubesock.recv(32)  
 print test  
 c.close()  
 sock.close()  
@@ -43,43 +41,23 @@ test = cubesock.sock.recv(32)
 
 # UDP client example
 
-from CubeSocket import CubeSocket  
+from CubeSocket256 import CubeSocket  
 
 host = "localhost"  
 port = 1666  
 
-socket = CubeSocket("NEVER", nonce_support=1,  mode=1)  
-socket.cubesendto("HELLO", host, port)  
+socket = CubeSocket("NEVER", protocol="UDP")  
+socket.sendto("HELLO", host, port)  
 
 # UDP Server example
 
-from CubeSocket import CubeSocket
+from CubeSocket256 import CubeSocket
 
 host = "localhost"  
 port = 1666  
 
-socket = CubeSocket("NEVER", nonce_support=1, mode=1)  
+socket = CubeSocket("NEVER", protocol="UDP")  
 socket.bind(host, port)  
 while True:  
     data = socket.cuberecvfrom(1024)  
     print data  
-
-# Server/Client communication using session key
-
-
-host = "localhost"  
-sock = CubeSocket("Test", dc=0)  
-sock.bind(host, 99)  
-sock.listen(1)  
-client, addr = sock.accept()  
-cubesock = CubeSocket(client, sock.session_key)  
-test = cubesock.cubesock.cuberecv(32)  
-print test  
-c.close()  
-sock.close()  
-
-key = "Test"  
-sock = CubeSocket(key, dc=0)  
-sock.cubeconnect("localhost", 99)  
-sock.cubesend("Test")  
-sock.close()  
