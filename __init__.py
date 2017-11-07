@@ -3,7 +3,7 @@ from dh import DiffieHellman
 import socket
 from hashlib import sha256
 
-# v0.3
+# v0.3.1
 
 class CubeSocket:
     def __init__(self, key=None, protocol="TCP", dc=0, algorithm="Cube", dhsize=1024):
@@ -119,7 +119,7 @@ class CubeSocket:
         return data
 
 class CubeWrap:
-    def __init__(self, sock, key, protocol="TCP", dc=0):
-        self.cubesock = CubeSocket(key, protocol, dc)
+    def __init__(self, sock, key, protocol="TCP", dc=0, algorithm="Cube"):
+        self.cubesock = CubeSocket(key, protocol, dc, algorithm=algorithm)
         self.cubesock.wrap(sock)
         self.raw_sock = sock
